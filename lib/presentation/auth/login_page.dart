@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:liftbros_mobile/constants.dart';
+import 'package:liftbros_mobile/data/api_provider.dart';
+import 'package:liftbros_mobile/data/auth_provider.dart';
+import 'package:liftbros_mobile/presentation/home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,6 +13,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final apiProvider = GetIt.instance<ApiProvider>();
+  final authProvider = GetIt.instance<AuthProvider>();
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -52,9 +59,17 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 32.0),
                 InkWell(
                   borderRadius: BorderRadius.circular(8.0),
-                  onTap: () {
+                  onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      // Process data.
+                      final loginDto = await apiProvider.login(
+                          _usernameController.text, _passwordController.text);
+
+                      authProvider.saveSessionToken(loginDto.sessionToken);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
                     }
                   },
                   child: Container(

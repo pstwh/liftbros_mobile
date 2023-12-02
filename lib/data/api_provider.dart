@@ -1,22 +1,25 @@
 import 'package:dio/dio.dart';
-import 'package:liftbros_mobile/entities/user.dart';
+import 'package:liftbros_mobile/data/dtos/login_dto.dart';
 
 class ApiProvider {
-  final Dio _dio = Dio(BaseOptions(baseUrl: 'http://localhost:5000/'));
+  final Dio _dio = Dio(
+    BaseOptions(
+      baseUrl: 'https://2213-179-211-51-13.ngrok-free.app/',
+      headers: {'Content-Type': 'application/json'},
+    ),
+  );
 
-  Future<User> login(String username, String password) async {
-    try {
-      Response response = await _dio.post(
-        'login',
-        data: {'username': username, 'password': password},
-      );
-      if (response.statusCode == 200) {
-        return User.fromJson(response.data);
-      } else {
-        throw Exception('Failed to login');
-      }
-    } on DioError catch (e) {
-      print(e);
+  Future<LoginDto> login(String username, String password) async {
+    Response response = await _dio.post(
+      'user/login',
+      data: {'username': username, 'password': password},
+    );
+
+    print(response.toString());
+
+    if (response.statusCode == 200) {
+      return LoginDto.fromJson(response.data);
+    } else {
       throw Exception('Failed to login');
     }
   }
