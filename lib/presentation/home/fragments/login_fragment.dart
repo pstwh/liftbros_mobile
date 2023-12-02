@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:liftbros_mobile/constants.dart';
 import 'package:liftbros_mobile/data/api_provider.dart';
-import 'package:liftbros_mobile/data/auth_provider.dart';
-import 'package:liftbros_mobile/presentation/home/home_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginFragment extends StatefulWidget {
+  const LoginFragment({required this.callback, super.key});
+
+  final Function callback;
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginFragmentState createState() => _LoginFragmentState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginFragmentState extends State<LoginFragment> {
   final apiProvider = GetIt.instance<ApiProvider>();
-  final authProvider = GetIt.instance<AuthProvider>();
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
@@ -22,14 +21,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar:
-          AppBar(title: const Text('Liftbros'), backgroundColor: appbarColor),
-      backgroundColor: backgroundColor,
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(32.0),
-          child: Form(
+    return Container(
+        padding: const EdgeInsets.all(32.0),
+        child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -64,12 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                       final loginDto = await apiProvider.login(
                           _usernameController.text, _passwordController.text);
 
-                      authProvider.saveSessionToken(loginDto.sessionToken);
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
+                      widget.callback(loginDto.sessionToken);
                     }
                   },
                   child: Container(
@@ -90,10 +79,6 @@ class _LoginPageState extends State<LoginPage> {
                 const Text('Join the Bros',
                     style: TextStyle(color: darkerColor))
               ],
-            ),
-          ),
-        ),
-      ),
-    );
+            )));
   }
 }

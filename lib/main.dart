@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:liftbros_mobile/data/api_provider.dart';
 import 'package:liftbros_mobile/data/auth_provider.dart';
-import 'package:liftbros_mobile/presentation/auth/login_page.dart';
+import 'package:liftbros_mobile/presentation/home/home_page.dart';
 
 final getIt = GetIt.instance;
 
@@ -11,8 +11,8 @@ void main() async {
   final provider = AuthProvider();
   await provider.retrieveSessionToken();
 
-  getIt.registerLazySingleton<AuthProvider>(() => provider);
-  getIt.registerLazySingleton<ApiProvider>(() => ApiProvider());
+  getIt.registerSingleton<AuthProvider>(provider);
+  getIt.registerSingleton<ApiProvider>(ApiProvider());
   runApp(const App());
 }
 
@@ -23,7 +23,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Liftbros',
-      home: const LoginPage(),
+      home: const HomePage(),
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
     );
