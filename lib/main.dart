@@ -10,6 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final provider = AuthProvider();
   await provider.retrieveSessionToken();
+  await provider.retrieveUserId();
 
   getIt.registerSingleton<AuthProvider>(provider);
   getIt.registerSingleton<ApiProvider>(ApiProvider());

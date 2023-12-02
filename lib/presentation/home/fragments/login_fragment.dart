@@ -58,7 +58,7 @@ class _LoginFragmentState extends State<LoginFragment> {
                       final loginDto = await apiProvider.login(
                           _usernameController.text, _passwordController.text);
 
-                      widget.callback(loginDto.sessionToken);
+                      widget.callback(loginDto.userId, loginDto.sessionToken);
                     }
                   },
                   child: Container(

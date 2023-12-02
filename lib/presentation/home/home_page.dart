@@ -36,8 +36,9 @@ class _HomePageState extends State<HomePage> {
                   authenticated = false;
                 });
               })
-            : LoginFragment(callback: (sessionToken) {
+            : LoginFragment(callback: (int userId, String sessionToken) {
                 authProvider.saveSessionToken(sessionToken);
+                authProvider.saveUserId(userId);
                 setState(() {
                   authenticated = true;
                 });
